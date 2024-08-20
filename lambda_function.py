@@ -15,12 +15,12 @@ def lambda_handler(event, context):
     print(event)
     try:
         bucket_name = event["Records"][0]["s3"]["bucket"]["name"]
-        logger.info("Source_Bucket_Name: ", bucket_name)
+        logger.info("Source_Bucket_Name: " + bucket_name)
         s3_file_key = event["Records"][0]["s3"]["object"]["key"]
-        logger.info("Source_File_Key: ", s3_file_key)
-        logger.info("Destination_Bucket_Name: ", destbucket)
+        logger.info("Source_File_Key: " + s3_file_key)
+        logger.info("Destination_Bucket_Name: " + destbucket)
         dest_file_key = s3_file_key.replace("raw_input", "processed-data")
-        logger.info("Destination_File_Key: ", dest_file_key)
+        logger.info("Destination_File_Key: " + dest_file_key)
         resp = s3_client.get_object(Bucket=bucket_name, Key=s3_file_key)
         df_s3_data = pd.read_json(resp['Body'], orient="records")
         print(df_s3_data.head())
