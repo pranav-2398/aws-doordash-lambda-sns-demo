@@ -26,9 +26,9 @@ def lambda_handler(event, context):
         print(df_s3_data.head())
 
         filtered_df = df_s3_data[df_s3_data["status"] == 'delivered']
-        filtered_df.to_json(dest_file_key, orient="records", indent= 4)
+        filtered_df.to_json('/tmp/test.json', orient="records", indent= 4)
 
-        s3_client.put_object(Bucket= destbucket, Key= dest_file_key, Body= dest_file_key)
+        s3_client.put_object(Bucket= destbucket, Key= dest_file_key, Body= '/tmp/test.json')
         message = "Input S3 File {} has been processed succesfully !!".format("s3://"+ bucket_name+ "/"+ s3_file_key)
         respone = sns_client.publish(Subject="SUCCESS - Daily Data Processing",TargetArn = sns_arn, Message=message, MessageStructure='text')
     except Exception as err:
